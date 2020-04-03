@@ -54,3 +54,11 @@ map.on('click',function(event) {
     console.log('clicked',current_location)
 })
 
+let draw_btn = document.getElementById('draw_btn')
+
+// a handler that is alled when button is clicked
+draw_btn.addEventListener('click',function() {
+    // print something in the console to test
+    console.log('clicked draw_btn')
+})
+
