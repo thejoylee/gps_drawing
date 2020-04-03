@@ -40,37 +40,45 @@ let current_location = [114.149991, 22.241631]
 // update variable whenever geolocation event fires
 geolocate.on('geolocate', function(event) {
     current_location = [event.coords.longitude, event.coords.latitude]
-    console.log('geolocated', current_location)
+    console.log('geolocated', current_location)   
 
     if (active) {
         path.push(current_location)
-        map.getSource('drawing').setData(geojson)
+        map.getSource('drawing').setData(geojson)   // update the layer because the path has changed
     }
+
 })
 
-// update the variable whenever you click on map
-map.on('click',function(event) {
+map.on('click', function(event) {
     current_location = [event.lngLat.lng, event.lngLat.lat]
-    console.log('clicked', current_location)
+    console.log('clicked', current_location)        
 
-    if (active) {
+    if (active) {                
         path.push(current_location)
-        console.log(path)
-        map.getSource('drawing').setData(geojson)
+        console.log(path)           
+        map.getSource('drawing').setData(geojson)   // update the layer because the path has changed        
     }
+
 })
 
 let draw_btn = document.getElementById('draw_btn')
 
-// a handler that is alled when button is clicked
-draw_btn.addEventListener('click',function() {
+// conditional if statement which code is running by determining our active variable
+draw_btn.addEventListener('click', function() {
 
-    // print something in the console to test
     console.log('clicked draw_btn')
+
+    if (active) {            // if we're already drawing, stop drawing
+        stopDrawing()
+    } else {                    // otherwise, start drawing
+        startDrawing()
+    }
+
 })
 
 let active = false
 let start_marker = new mapboxgl.Marker()
+let path = []
 
 function startDrawing() {
     active = true
@@ -103,47 +111,20 @@ function stopDrawing() {
 
 }
 
-// conditional if statement which code is running by determining our active variable
-draw_btn.addEventListener('click',function() {
-    console.log('clicked draw_btn')
-    if (active) {
-        stopDrawing()
-    } else {
-        startDrawing()
-    }
-})
-
-let active = false
-let start_marker = new mapboxgl.Marker()
-let path = []
-
-function startDrawing () {
-    active = true
-
-    draw_btn.style['background-color'] = "red"    
-    draw_btn.style['color'] = "white"             
-    draw_btn.value = 'Stop and save'              
-
-    start_marker.setLngLat(current_location)
-    start_marker.addTo(map)
-
-    path.push(current_location)         // add the current location to the path
-}
-
-map.on('load', function() {
-    map.addLayer({
-        'id':'drawing',
-        'type':'line',
-        'source':{
-            'type':'geojson',
-            'data':null
+map.on('load', function() {             // 'load' event handler
+    map.addLayer({                      // add a layer
+        'id': 'drawing',
+        'type': 'line',
+        'source': {
+            'type': 'geojson',
+            'data': null
         },
-        'layout':{
-            'line-cap':'round',
-            'line-join':'round'
+        'layout': {
+            'line-cap': 'round',
+            'line-join': 'round'
         },
-        'paint':{
-            'line-color':'#50C3DF',
+        'paint': {
+            'line-color': '#50C3DF',
             'line-width': 5,
             'line-opacity': .8
         }
