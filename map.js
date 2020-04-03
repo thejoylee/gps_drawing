@@ -7,7 +7,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoidGhlam95bGVlIiwiYSI6ImNrN3BmZnZ5NDBqYjQzbW1pN
 let map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/thejoylee/ck8jeyygq00ny1iml5aye553q',
-    center: [114.150124, 22.247250],
+    center: [114.150088, 22.242952],
     zoom: 15
 })
 
@@ -34,7 +34,7 @@ let geolocate = new mapboxgl.GeolocateControl({
 map.addControl(geolocate, 'top-left')
 
 // create variable to keep track of user's location, default to center of the map
-let current_location = [114.150124, 22.247250]
+let current_location = [114.150088, 22.242952]
 
 // update variable whenever geolocation event fires
 geolocate.on('geolocate', function(event) {
