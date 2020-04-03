@@ -31,7 +31,13 @@ let geolocate = new mapboxgl.GeolocateControl({
     fitBoundsOptions: {
     }
 })
+
 map.addControl(geolocate, 'top-left')
+
+// event handler
+geolocate.on('geolocate', function(event) {
+    console.log(event.coords)
+})
 
 // create variable to keep track of user's location, default to center of the map
 let current_location = [114.149991, 22.241631]
