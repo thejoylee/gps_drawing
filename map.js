@@ -44,6 +44,7 @@ geolocate.on('geolocate', function(event) {
 
     if (active) {
         path.push(current_location)
+        map.getSource('drawing').setData(geojson)
     }
 })
 
@@ -55,6 +56,7 @@ map.on('click',function(event) {
     if (active) {
         path.push(current_location)
         console.log(path)
+        map.getSource('drawing').setData(geojson)
     }
 })
 
@@ -79,6 +81,17 @@ function startDrawing() {
     draw_btn.style['background-color'] = "red"
     draw_btn.sttyle['color'] = "white"
     draw_btn.value = 'Stop and save'
+
+    path.push(current_location)
+
+    geojson.features.push({
+        "type": "Feature",
+        "geometry": {
+            "type": "LineString",
+            "coordinates": path
+        }
+    })
+    map.getSource('drawing').setData(geojson)
 }
 
 function stopDrawing() {
@@ -117,3 +130,27 @@ function startDrawing () {
     path.push(current_location)         // add the current location to the path
 }
 
+map.on('load', function() {
+    map.addLayer({
+        'id':'drawing',
+        'type':'line',
+        'source':{
+            'type':'geojson',
+            'data':null
+        },
+        'layout':{
+            'line-cap':'round',
+            'line-join':'round'
+        },
+        'paint':{
+            'line-color':'#50C3DF',
+            'line-width': 5,
+            'line-opacity': .8
+        }
+    })
+})
+
+let geojson = {
+    "type": "FeatureCollection",
+    "features": []
+}
