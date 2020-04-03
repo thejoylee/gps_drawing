@@ -8,7 +8,7 @@ let map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/thejoylee/ck8jeyygq00ny1iml5aye553q',
     center: [114.150124, 22.247250],
-    zoom: 16
+    zoom: 15
 })
 
 let navigation = new mapboxgl.NavigationControl({
@@ -21,6 +21,17 @@ let scale = new mapboxgl.ScaleControl({
     unit: 'imperial'
 })
 map.addControl(scale, 'bottom-right')
+
+let geolocate = new mapboxgl.GeolocateControl({
+    positionOptions: {
+        enableHighAccuracy: true
+    },
+    trackUserLocation: true,
+    showUserLocation: true,
+    fitBoundsOptions: {
+    }
+})
+map.addControl(geolocate, 'top-left')
 
 // create variable to keep track of user's location, default to center of the map
 let current_location = [114.150124, 22.247250]
