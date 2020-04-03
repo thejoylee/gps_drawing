@@ -34,11 +34,6 @@ let geolocate = new mapboxgl.GeolocateControl({
 
 map.addControl(geolocate, 'top-left')
 
-// event handler
-geolocate.on('geolocate', function(event) {
-    console.log(event.coords)
-})
-
 // create variable to keep track of user's location, default to center of the map
 let current_location = [114.149991, 22.241631]
 
@@ -46,19 +41,79 @@ let current_location = [114.149991, 22.241631]
 geolocate.on('geolocate', function(event) {
     current_location = [event.coords.longitude, event.coords.latitude]
     console.log('geolocated', current_location)
+
+    if (active) {
+        path.push(current_location)
+    }
 })
 
 // update the variable whenever you click on map
 map.on('click',function(event) {
     current_location = [event.lngLat.lng, event.lngLat.lat]
-    console.log('clicked',current_location)
+    console.log('clicked', current_location)
+
+    if (active) {
+        path.push(current_location)
+        console.log(path)
+    }
 })
 
 let draw_btn = document.getElementById('draw_btn')
 
 // a handler that is alled when button is clicked
 draw_btn.addEventListener('click',function() {
+
     // print something in the console to test
     console.log('clicked draw_btn')
 })
+
+let active = false
+let start_marker = new mapboxgl.Marker()
+
+function startDrawing() {
+    active = true
+
+    start_marker.setLngLat(current_location)
+    start_marker.addTo(map)
+
+    draw_btn.style['background-color'] = "red"
+    draw_btn.sttyle['color'] = "white"
+    draw_btn.value = 'Stop and save'
+}
+
+function stopDrawing() {
+    active = false
+
+    draw_btn.style['background-color'] = "white"
+    draw_btn.sttyle['color'] = "black"
+    draw_btn.value = 'Start'
+
+}
+
+// conditional if statement which code is running by determining our active variable
+draw_btn.addEventListener('click',function() {
+    console.log('clicked draw_btn')
+    if (active) {
+        stopDrawing()
+    } else {
+        startDrawing()
+    }
+})
+
+let active = false
+let start_marker = new mapboxgl.Marker()
+let path = []
+
+function startDrawing () {
+    active = true
+
+    draw_btn.style['background-color'] = "red"    
+    draw_btn.style['color'] = "white"             
+    draw_btn.value = 'Stop and save'              
+
+    start_marker.setLngLat(current_location)
+    start_marker.addTo(map)
+
+    path.push(current_location)         // add the current location to the path
+}
 
